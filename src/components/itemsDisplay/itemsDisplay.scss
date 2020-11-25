@@ -1,0 +1,17 @@
+.collection-preview {
+  .title {
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 25px;
+  }
+  .preview {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    width: 100%;
+    grid-gap: 1rem;
+
+    .collection-item {
+      width: 100%;
+    }
+  }
+}
