@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import FormInput from './../formInput/FormInput';
-import CustomButton from './../customButton/CustomButton';
+import CustomButton from './../customButton/CustomButton.component';
 
 import './signUp.scss';
 import { auth, createUser } from '../../firebase/firebase.utils';
@@ -26,7 +26,6 @@ export class SignUp extends Component {
       return;
     }
     try {
-      console.log(this.state);
       const { user } = await auth.createUserWithEmailAndPassword(email, password);
 
       await createUser(user, { displayName });

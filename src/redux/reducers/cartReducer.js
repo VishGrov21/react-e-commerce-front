@@ -23,7 +23,6 @@ const clearItemFromReducer = (currentItemsArray, itemToBeRemoved) => {
     // in an array, and constructs a new array of all the values for which
     // callback returns a value that coerces to true.
     // filter() does not mutate the array on which it is called.
-    console.log(item);
     return item.id !== itemToBeRemoved.id;
   });
 };

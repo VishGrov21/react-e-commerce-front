@@ -1,50 +1,48 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { createStructuredSelector } from 'reselect';
-import { ReactComponent as Logo } from '../../assets/images/crown.svg';
 import { auth } from '../../firebase/firebase.utils';
+import { ReactComponent as Logo } from '../../assets/images/crown.svg';
 import CartDropdown from '../shopping-cart/CartDropdown';
 import ShoppingCart from '../shopping-cart/ShoppingCart';
 import { selectCurrentUser } from '../../redux/selectors/userSelector';
-import './header.scss';
+import { HeaderContainer, LogoContainer, NavigationMenuDiv, NavigationMenuLink, NavLinkContainer } from './Header.styles';
 
 const Header = ({ currentUser, handleCartDisplay }) => {
   return (
-    <div className='header-container'>
-      <Link to='/' className='logoContainer'>
+    <HeaderContainer >
+      <LogoContainer to='/' >
         <Logo className='logo' />
-      </Link>
-      <div className='nav-link-container'>
-        <Link to='/shop' className='navigationMenu'>
+      </LogoContainer>
+      <NavLinkContainer >
+        <NavigationMenuLink to='/shop' >
           Shop
-        </Link>
-        <Link to='/contact' className='navigationMenu'>
+        </NavigationMenuLink>
+        <NavigationMenuLink to='/contact' >
           Contact
-        </Link>
+        </NavigationMenuLink>
         {currentUser !== null ? (
-          <div className='navigationMenu' onClick={() => auth.signOut()}>
+          <NavigationMenuDiv  onClick={() => auth.signOut()}>
             Sign Out
-          </div>
+          </NavigationMenuDiv>
         ) : (
-          <Link to='/sign-in' className='navigationMenu'>
+          <NavigationMenuLink to='/sign-in' >
             Sign In
-          </Link>
+          </NavigationMenuLink>
         )}
         <ShoppingCart
           onClick={() => {
-            console.log('testing');
             this.props.handleCartDisplay();
           }}
         />
-      </div>
+      </NavLinkContainer>
       <CartDropdown />
-    </div>
+    </HeaderContainer>
   );
 };
 
 const mapStateToProps = createStructuredSelector({
-  selectCurrentUser,
+  currentUser:selectCurrentUser,
 });
 
 export default connect(mapStateToProps)(Header);

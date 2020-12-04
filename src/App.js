@@ -5,17 +5,18 @@ import './App.css';
 import Homepage from './pages/homepage/Homepage';
 import ShopPage from './pages/shop/ShopPage';
 import SignInAndSignUpPage from './pages/signInAndSignUpPage/SignInAndSignUpPage';
-import Header from './components/header/Header';
+import Header from './components/header/Header.component';
 import { auth, createUser } from './firebase/firebase.utils';
 import { connect } from 'react-redux';
 import { setCurrentUser } from './redux/actions/userActions';
 import CheckoutPage from './pages/checkoutPage/CheckoutPage';
+// import { selectShopCollectionsForPreview } from './redux/selectors/shopDataSelector';
 
 class App extends Component {
   unSubscribeFromAuth = null;
 
   componentDidMount() {
-    const { setUser } = this.props;
+    const { setUser,} = this.props;
     // onAuthStateChanged method is an open subscription between our app and firebase
     // Whenever any changes occur on firebase or our app from any source related to this app
     // Firebase sends a msg that auth state has changed
@@ -40,6 +41,11 @@ class App extends Component {
       // So we are setting the currentUser to null.
       setUser({ currentUser: userAuth });
     });
+    // In the below three lines I have added the code that would add the shopdata in the firestore.
+    // addCollectionAndDocuments(
+    //   'shopData',
+    //   colectionsArray.map(({ title, items }) => ({ title, items })),
+    // );
   }
 
   componentWillUnmount() {
@@ -69,6 +75,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
   currentUser: state.user.currentUser,
+  // colectionsArray: selectShopCollectionsForPreview(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({

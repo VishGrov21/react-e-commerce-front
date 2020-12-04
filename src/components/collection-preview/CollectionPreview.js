@@ -3,9 +3,8 @@ import CollectionItem from '../collection-item/CollectionItem';
 import './collectionPreview.scss';
 
 const CollectionPreview = ({ title, items, categoryPage }) => {
-  console.log(`title: ${title}`);
   const previewItems = items
-    .filter((_, index) => (!categoryPage ? index < 4 : true))
+    .filter((_, index) => (!categoryPage ? index < 6 : true))
     .map((item) => {
       return <CollectionItem key={item.id} item={item} />;
     });

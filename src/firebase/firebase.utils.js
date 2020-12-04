@@ -55,4 +55,36 @@ export const createUser = async (user, additonalData) => {
   }
 };
 
+export const addCollectionAndDocuments = async (collectionName, documentsToAdd) => {
+  const collectionRef = firestore.collection(collectionName);
+
+  const batch = firestore.batch();
+  documentsToAdd.forEach((document) => {
+    const newRefDoc = collectionRef.doc();
+    batch.set(newRefDoc, document);
+  });
+
+  return await batch.commit();
+};
+
+export const addPropertiesToProductsCollection = (productCollectionsRef) => {
+  // Products collection Ref object will have docs which is then applied map to get array
+  // This array will contain objects of individual categories & their data in object format
+  const transformedProductObj = productCollectionsRef.docs.map((doc) => {
+    const { title, items } = doc.data();
+
+    return {
+      title,
+      items,
+      routeName: encodeURI(title.toLowerCase()),
+      id: doc.id,
+    };
+  });
+  // console.log(transformedProductObj);
+  return transformedProductObj.reduce((accumulatorObj, product) => {
+    accumulatorObj[product.title.toLowerCase()] = product;
+    return accumulatorObj;
+  }, {});
+};
+
 export default firebase;

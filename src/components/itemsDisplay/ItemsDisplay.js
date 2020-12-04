@@ -3,7 +3,6 @@ import CollectionItem from '../collection-item/CollectionItem';
 import './itemsDisplay.scss';
 
 const ItemsDisplay = ({ title, items, categoryPage }) => {
-  console.log(`title: ${title}`);
   const previewItems = items.map((item) => {
     return <CollectionItem key={item.id} item={item} />;
   });

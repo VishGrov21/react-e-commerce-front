@@ -1,5 +1,5 @@
 import React from 'react';
-import CustomButton from './../customButton/CustomButton';
+import CustomButton from './../customButton/CustomButton.component';
 import './cartDropdown.scss';
 import { connect } from 'react-redux';
 import CartItem from './CartItem.js';
@@ -13,7 +13,6 @@ const CartDropdown = ({ toggleCartDropdown, cartItemsArray, history, hideCartDro
       {cartItemsArray.length ? (
         <div className='items'>
           {cartItemsArray.map((item) => {
-            console.log(item);
             return <CartItem key={item.id} {...item} />;
           })}
         </div>
