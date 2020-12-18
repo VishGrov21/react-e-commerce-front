@@ -47,7 +47,9 @@ const ShopPage = ({ fetchProductsDataStart, collections, isShopDataFetching, mat
       <Route
         exact
         path={`${match.path}`}
-        render={() => <RenderPreviewWithSpinner isLoading={isShopDataFetching} {...this.props} />}
+        render={() => (
+          <RenderPreviewWithSpinner isLoading={isShopDataFetching} collections={collections} />
+        )}
       />
       <Route
         exact
