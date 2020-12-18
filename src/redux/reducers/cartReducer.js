@@ -39,6 +39,12 @@ const reduceItemFromCartReducer = (currentItemsArray, itemToBeReduced) => {
   }
 };
 
+function findTheItem(itemsArray, itemToFind) {
+  return itemsArray.find((item) => {
+    return item.id === itemToFind.id;
+  });
+}
+
 const cartReducer = (state = initialState, { type, payload }) => {
   switch (type) {
     case cartActionTypes.TOGGLE_CART_HIDDEN:
@@ -58,15 +64,14 @@ const cartReducer = (state = initialState, { type, payload }) => {
         ...state,
         cartItems: reduceItemFromCartReducer(state.cartItems, payload),
       };
+    case cartActionTypes.CLEAR_CART:
+      return {
+        ...state,
+        cartItems: [],
+      };
     default:
       return state;
   }
 };
-
-function findTheItem(itemsArray, itemToFind) {
-  return itemsArray.find((item) => {
-    return item.id === itemToFind.id;
-  });
-}
 
 export default cartReducer;

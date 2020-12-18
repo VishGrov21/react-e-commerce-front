@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
-import CollectionPreview from '../../components/collection-preview/CollectionPreview';
+import React, { useEffect } from 'react';
 import { createStructuredSelector } from 'reselect';
+
+import CollectionPreview from '../../components/collection-preview/CollectionPreview';
 import {
   selectShopCollectionsForPreview,
   selectIsShopDataFetching,
@@ -8,8 +9,7 @@ import {
 import { connect } from 'react-redux';
 import { Route } from 'react-router-dom';
 import ItemsDisplay from './../../components/itemsDisplay/ItemsDisplay';
-
-import { fetchProductsDataAsync } from './../../redux/actions/productsActions';
+import { fetchProductsDataStart } from './../../redux/actions/productsActions';
 import WithSpinner from '../../components/withSpinner/WithSpinner.component';
 
 function renderPreview(collectionItems) {
@@ -19,10 +19,7 @@ function renderPreview(collectionItems) {
 }
 
 function RenderCollectionsPreview({ collections }) {
-  // console.log('Props Are: ', props);
   return renderPreview(collections);
-
-  // <h1>Hello</h1>;
 }
 
 function RenderCollectionCategory({ match, collections }) {
@@ -31,40 +28,41 @@ function RenderCollectionCategory({ match, collections }) {
   return <ItemsDisplay {...collectionItem} categoryPage />;
 }
 
+function getTheItemsByCategory(collectionsArray, category) {
+  return collectionsArray.find((itemObj) => itemObj.routeName === category);
+}
+
 const RenderPreviewWithSpinner = WithSpinner(RenderCollectionsPreview);
 
 const RenderCollectionCategoryWithLoader = WithSpinner(RenderCollectionCategory);
 
-class ShopPage extends Component {
-  componentDidMount() {
-    this.props.fetchProductsDataAsync();
-  }
-  render() {
-    const { collections, isShopDataFetching } = this.props;
-    const { match } = this.props;
-    return (
-      <div>
-        <h1>SHOP PAGE</h1>
-        <Route
-          exact
-          path={`${match.path}`}
-          render={() => <RenderPreviewWithSpinner isLoading={isShopDataFetching} {...this.props} />}
-        />
-        <Route
-          exact
-          path={`${match.path}/:categoryId`}
-          render={(routerProps) => (
-            <RenderCollectionCategoryWithLoader
-              isLoading={isShopDataFetching}
-              {...routerProps}
-              collections={collections}
-            />
-          )}
-        />
-      </div>
-    );
-  }
-}
+const ShopPage = ({ fetchProductsDataStart, collections, isShopDataFetching, match }) => {
+  useEffect(() => {
+    fetchProductsDataStart();
+  }, [fetchProductsDataStart]);
+
+  return (
+    <div>
+      <h1>SHOP PAGE</h1>
+      <Route
+        exact
+        path={`${match.path}`}
+        render={() => <RenderPreviewWithSpinner isLoading={isShopDataFetching} {...this.props} />}
+      />
+      <Route
+        exact
+        path={`${match.path}/:categoryId`}
+        render={(routerProps) => (
+          <RenderCollectionCategoryWithLoader
+            isLoading={isShopDataFetching}
+            {...routerProps}
+            collections={collections}
+          />
+        )}
+      />
+    </div>
+  );
+};
 
 const mapStateToProps = createStructuredSelector({
   isShopDataFetching: selectIsShopDataFetching,
@@ -72,11 +70,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchProductsDataAsync: () => dispatch(fetchProductsDataAsync()),
+  fetchProductsDataStart: () => dispatch(fetchProductsDataStart()),
 });
-
-function getTheItemsByCategory(collectionsArray, category) {
-  return collectionsArray.find((itemObj) => itemObj.routeName === category);
-}
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShopPage);

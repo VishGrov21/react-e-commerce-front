@@ -1,16 +1,16 @@
 import { productActionTypes } from './productsActionsTypes';
 import { firestore, addPropertiesToProductsCollection } from '../../firebase/firebase.utils';
 
-const fetchProductsDataStart = () => ({
+export const fetchProductsDataStart = () => ({
   type: productActionTypes.FETCH_PRODUCTS_DATA_START,
 });
 
-const fetchProductsDataSuccess = (payload) => ({
+export const fetchProductsDataSuccess = (payload) => ({
   type: productActionTypes.FETCH_PRODUCTS_DATA_SUCCESS,
   payload,
 });
 
-const fetchProductsDataFailure = (payload) => ({
+export const fetchProductsDataFailure = (payload) => ({
   type: productActionTypes.FETCH_PRODUCTS_DATA_FAILURE,
   payload,
 });
@@ -18,7 +18,6 @@ const fetchProductsDataFailure = (payload) => ({
 export const fetchProductsDataAsync = () => {
   return (dispatch) => {
     const getProductsCollectionRef = firestore.collection('shopData');
-    console.log(getProductsCollectionRef);
     dispatch(fetchProductsDataStart());
     getProductsCollectionRef
       .get()

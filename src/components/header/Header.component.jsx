@@ -1,34 +1,32 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
-import { auth } from '../../firebase/firebase.utils';
 import { ReactComponent as Logo } from '../../assets/images/crown.svg';
 import CartDropdown from '../shopping-cart/CartDropdown';
 import ShoppingCart from '../shopping-cart/ShoppingCart';
 import { selectCurrentUser } from '../../redux/selectors/userSelector';
-import { HeaderContainer, LogoContainer, NavigationMenuDiv, NavigationMenuLink, NavLinkContainer } from './Header.styles';
+import {
+  HeaderContainer,
+  LogoContainer,
+  NavigationMenuDiv,
+  NavigationMenuLink,
+  NavLinkContainer,
+} from './Header.styles';
+import { signOutStart } from './../../redux/actions/userActions';
 
-const Header = ({ currentUser, handleCartDisplay }) => {
+const Header = ({ currentUser, handleCartDisplay, signOut }) => {
   return (
-    <HeaderContainer >
-      <LogoContainer to='/' >
+    <HeaderContainer>
+      <LogoContainer to='/'>
         <Logo className='logo' />
       </LogoContainer>
-      <NavLinkContainer >
-        <NavigationMenuLink to='/shop' >
-          Shop
-        </NavigationMenuLink>
-        <NavigationMenuLink to='/contact' >
-          Contact
-        </NavigationMenuLink>
+      <NavLinkContainer>
+        <NavigationMenuLink to='/shop'>Shop</NavigationMenuLink>
+        <NavigationMenuLink to='/contact'>Contact</NavigationMenuLink>
         {currentUser !== null ? (
-          <NavigationMenuDiv  onClick={() => auth.signOut()}>
-            Sign Out
-          </NavigationMenuDiv>
+          <NavigationMenuDiv onClick={signOut}>Sign Out</NavigationMenuDiv>
         ) : (
-          <NavigationMenuLink to='/sign-in' >
-            Sign In
-          </NavigationMenuLink>
+          <NavigationMenuLink to='/sign-in'>Sign In</NavigationMenuLink>
         )}
         <ShoppingCart
           onClick={() => {
@@ -42,7 +40,11 @@ const Header = ({ currentUser, handleCartDisplay }) => {
 };
 
 const mapStateToProps = createStructuredSelector({
-  currentUser:selectCurrentUser,
+  currentUser: selectCurrentUser,
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = (dispatch) => ({
+  signOut: () => dispatch(signOutStart()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

@@ -20,10 +20,25 @@ export const auth = firebase.auth();
 export const firestore = firebase.firestore();
 
 // Code for handling sign-in with google
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
+export const googleProvider = new firebase.auth.GoogleAuthProvider();
+googleProvider.setCustomParameters({ prompt: 'select_account' });
 // exporting sign-in with google method
-export const signInWIthGoogle = () => auth.signInWithPopup(provider);
+export const signInWIthGoogle = () => auth.signInWithPopup(googleProvider);
+
+export const setCurrentUser = () => {
+  return new Promise((resolve, reject) => {
+    // onAuthStateChanged method is an open subscription between our app and firebase
+    // Whenever any changes occur on firebase or our app from any source related to this app
+    // Firebase sends a msg that auth state has changed
+    // Whether they signed-in through some service like Google Sign In
+    // Or using email and password
+    // This connection is always open as long as this component is mounted on the dom.
+    const unSubscribe = auth.onAuthStateChanged((userAuth) => {
+      unSubscribe();
+      resolve(userAuth);
+    }, reject);
+  });
+};
 
 export const createUser = async (user, additonalData) => {
   if (user) {
