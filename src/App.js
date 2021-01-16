@@ -1,16 +1,21 @@
-import React, { useEffect } from 'react';
+import React, { lazy, Suspense, useEffect } from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import './App.css';
-
-import Homepage from './pages/homepage/Homepage';
-import ShopPage from './pages/shop/ShopPage';
-import SignInAndSignUpPage from './pages/signInAndSignUpPage/SignInAndSignUpPage';
 import Header from './components/header/Header.component';
 import { connect } from 'react-redux';
-import CheckoutPage from './pages/checkoutPage/CheckoutPage';
 import { checkUserSession } from './redux/actions/userActions';
+import Spinner from './components/spinner/Spinner.component';
+import ErrorBoundary from './components/error-boundary/ErrorBoundary.component';
+import './App.css';
+
+const HomepageLazy = lazy(() => import('./pages/homepage/Homepage'));
+const ShoppageLazy = lazy(() => import('./pages/shop/ShopPage'));
+const CheckoutPageLazy = lazy(() => import('./pages/checkoutPage/CheckoutPage'));
+const SignInAndSignUpPageLazy = lazy(() =>
+  import('./pages/signInAndSignUpPage/SignInAndSignUpPage'),
+);
 
 const App = ({ checkUserSession, currentUser }) => {
+
   useEffect(() => {
     checkUserSession();
   }, [checkUserSession]);
@@ -19,14 +24,18 @@ const App = ({ checkUserSession, currentUser }) => {
     <React.Fragment>
       <Header />
       <Switch>
-        <Route exact path='/' component={Homepage} />
-        <Route path='/shop' component={ShopPage} />
-        <Route exact path='/checkout' component={CheckoutPage} />
-        <Route
-          exact
-          path='/sign-in'
-          render={() => (currentUser ? <Redirect to='/' /> : <SignInAndSignUpPage />)}
-        />
+        <ErrorBoundary>
+          <Suspense fallback={<Spinner />}>
+            <Route exact path='/' component={HomepageLazy} />
+            <Route path='/shop' component={ShoppageLazy} />
+            <Route exact path='/checkout' component={CheckoutPageLazy} />
+            <Route
+              exact
+              path='/sign-in'
+              render={() => (currentUser ? <Redirect to='/' /> : <SignInAndSignUpPageLazy />)}
+            />
+          </Suspense>
+        </ErrorBoundary>
       </Switch>
     </React.Fragment>
   );

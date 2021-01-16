@@ -1,21 +1,8 @@
 import React from 'react';
-import './withSpinner.scss';
+import Spinner from '../spinner/Spinner.component';
 
 const WithSpinner = (WrappedComponent) => ({ isLoading, ...otherprops }) => {
-  return isLoading ? (
-    <div className='loading-overlay'>
-      <div className='spinner'>
-        <div className='sk-folding-cube'>
-          <div className='sk-cube1 sk-cube'></div>
-          <div className='sk-cube2 sk-cube'></div>
-          <div className='sk-cube4 sk-cube'></div>
-          <div className='sk-cube3 sk-cube'></div>
-        </div>
-      </div>
-    </div>
-  ) : (
-    <WrappedComponent {...otherprops} />
-  );
+  return isLoading ? <Spinner /> : <WrappedComponent {...otherprops} />;
 };
 
 export default WithSpinner;
