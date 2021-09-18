@@ -1,31 +1,16 @@
-import React from 'react';
-import { createStructuredSelector } from 'reselect';
-import './checkout.scss';
-import {
-  selectCartItems,
-  selectCartItemsQuantity,
-  selectCartItemsTotalPrice,
-} from './../../redux/selectors/cartSelector';
-import { connect } from 'react-redux';
-import {
-  addItemToCart,
-  clearItemFromCartAction,
-  reduceItemFromCartAction,
-} from './../../redux/actions/cartActions';
-import StripeCheckoutButton from '../stripeButton/StripeCheckoutButton';
+import React from "react";
+import { createStructuredSelector } from "reselect";
+import "./checkout.scss";
+import { selectCartItems, selectCartItemsQuantity, selectCartItemsTotalPrice } from "redux/selectors/cartSelector";
+import { connect } from "react-redux";
+import { addItemToCart, clearItemFromCartAction, reduceItemFromCartAction } from "redux/actions/cartActions";
+import StripeCheckoutButton from "../stripeButton/StripeCheckoutButton";
 
 const currentDate = new Date();
 const tomorrow = new Date();
 tomorrow.setDate(currentDate.getDate() + 1);
 
-const Checkout = ({
-  cartItemsArray,
-  itemCount,
-  totalPrice,
-  removeItemFromCart,
-  addItem,
-  reduceItemFromCart,
-}) => {
+const Checkout = ({ cartItemsArray, itemCount, totalPrice, removeItemFromCart, addItem, reduceItemFromCart }) => {
   return (
     <div className='checkout-container'>
       <div className='checkout-header'>
